@@ -5,45 +5,71 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
+  <button id = clear>Clear Grid</button>
     <div id="container">
     </div>
-
-    <script>
-        
     
-let rows = document.getElementsByClassName("gridRow");
-let cells = document.getElementsByClassName("cell");
+    <script>
+    
 
-// Creates a default grid sized 16x16
-function defaultGrid() {
-    makeRows(16);
-    makeColumns(16);
+   const container = document.getElementById("container");
+
+  // build grid using CSS-grid
+function makeRows(rows, cols) {
+  container.style.setProperty('--grid-rows', rows);
+  container.style.setProperty('--grid-cols', cols);
+  for (c = 0; c < (rows * cols); c++) {
+    let cell = document.createElement("div");
+    //cell.innerText = (c + 1);
+    container.appendChild(cell).className = "grid-item";
+    cell.addEventListener('mouseenter', function(e){
+        cell.style.backgroundColor = randomColor();
+       console.log(e);
+    });
+
+  };
+};
+
+//default grid
+makeRows(16, 16);
+
+// clear the cell background color
+const clear = document.querySelector('#clear');
+  clear.onclick = function(){
+    elements = document.getElementsByClassName('grid-item');
+    for (let i=0; i<= elements.length; i++){
+      elements[i].style.backgroundColor = "";
+    }
+
+  }
+  // invoke clearBox, build new grid upon input
+  clear.addEventListener('click', function(e){
+    clearBox();
+    let newRow = window.prompt('how many rows?')
+    let newCol = window.prompt('how many columns?')
+    makeRows(newRow, newCol);
+  })
+
+  // clears the container of any children
+  function clearBox()
+{
+    document.getElementById('container').innerHTML = "";
 }
 
-// Takes (rows, columns) input and makes a grid
-function makeRows(rowNum) {
+let randomColor = function() {
+    let letters = '0123456789ABCDEF';
+    let color = '#';
+    for (let i = 0; i < 6; i++) {
+      color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
+}
 
-    // Creates rows
-    for (r = 0; r < rowNum; r++) {
-        let row = document.createElement("div");
-        container.appendChild(row).className = "gridRow";
-    };
-};
-
-// Creates columns
-function makeColumns(cellNum) {
-    for (i = 0; i < rows.length; i++) {
-        for (j = 0; j < cellNum; j++) {
-            let newCell = document.createElement("div");
-            rows[j].appendChild(newCell).className = "cell";
-        };
-
-    };
-};
-
+   
     </script>
 </body>
 </html>
